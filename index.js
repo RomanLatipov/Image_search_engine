@@ -15,9 +15,9 @@ for (let i=0; i<3; i++){
     fs.writeFileSync(`./result${i}.jpg`, result.objects[i].properties.image, 'base64');
 }
 
-for await (let item of myCollection.iterator()) {
-  console.log(item.uuid, item.properties);
-}
+// for await (let item of myCollection.iterator()) {
+//   console.log(item.uuid, item.properties);
+// }
 
 // const img = fs.readFileSync('images/download-2.jpg');
 // const b64 = Buffer.from(img).toString('base64');

@@ -1,4 +1,5 @@
-import { weaviate, generateUuid5 } from 'weaviate-client';
+import { generateUuid5 } from 'weaviate-client';
+import weaviate from 'weaviate-client'
 import fs from 'fs';
 
 const client = await weaviate.connectToLocal()
@@ -11,6 +12,7 @@ const client = await weaviate.connectToLocal()
 //     image: b64,
 //     text: 'test'
 // }).do();
+// await client.data.creator().withClassName("Images").withProperties(dataObj).withId(uuid).do();
 
 const myCollection = client.collections.get('Images');
 const idArr = [];
@@ -27,8 +29,12 @@ const promises = imgFiles.map(async (imgFile) => {
         text : imgFile.split('.')[0].split('_').join(' ')
     }
     const uuid = generateUuid5(JSON.stringify(dataObj))
-    if (!idArr.includes(uuid))
-        await client.data.creator().withClassName("Images").withProperties(dataObj).withId(uuid).do();
+    if (!idArr.includes(uuid)) {
+        await myCollection.data.insert({
+            properties: dataObj,
+            id: uuid
+        })
+    }
 })
 
 await Promise.all(promises);

@@ -1,11 +1,11 @@
-// import './App.css';
+import './App.css';
 import {useState, useRef} from 'react';
 
 function App() {
-  // const [images, setImages] = useState([]);
-  const [isDragging, setIsDragging] = useState(false);
+  const [temp, setTemp] = useState('');
+  // const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
-  const [temp, setTemp] = useState('')
+  const [display, setDisplay] = useState('None')
 
   function selectFiles() {
     fileInputRef.current.click();
@@ -15,40 +15,49 @@ function App() {
     setTemp(imgLink)
     console.log(imgLink)
   }
-
   function onDragOver(event){
     event.preventDefault();
-    setIsDragging(true)
+    // setIsDragging(true)
+    event.dataTransfer.dropEffect = "copy";
   }
-
+  // function onDragLeave(event) {
+  //   event.preventDefault();
+  //   setIsDragging(false);
+  // }
+  function onDrop(event) {
+    event.preventDefault();
+    // setIsDragging(false);
+    const files = event.dataTransfer.files[0]
+    let imgLink = URL.createObjectURL(files); 
+    console.log(imgLink)
+    setTemp(imgLink)
+    setDisplay("Block")
+  }
   return (<>
-    <div className="card">
-      <div className="top">
-        <p>Drag & Drop image uploading</p>
-      </div>
-      <div className="drag-area" onDragOver={onDragOver} onDragLeave={() => setIsDragging(false)} onDrop={() => setIsDragging(false)}>
-        {isDragging ? (
-          <span className='select'>Drop images here</span>
-        ) : (<>
-          Drag & Drop image here or {" "}
-          <span className="select" role="button" onClick={selectFiles}>
-            Browse
-          </span>
-          </>)}
-        <input type="file" accept="image/*" id="input-file" multiple ref={fileInputRef} onChange={upLoadImage}></input>
-        <input type="text" id="text-box"></input>
-        {/* <input name="file" type="file" className="file" multiple ref={fileInputRef} onChange={event => onFileSelect(event)}></input> */}
-      </div>
-      <div className="container">
-        <div className="image">
-          {/* <span className="delete">&times;</span> */}
+  {/* enctype='multipart/form-data' */}
+    <div className="upload-container" >
+      <div className="display-container">
+        <div className="image-container" style={{display: display}}>
+          <img src={temp}/>
         </div>
-        <img src={temp} alt=""/>
+        <div className="upload-files-container">
+          <div className="drag-file-area" onDragOver={onDragOver} onDrop={onDrop}>
+            <span className="material-icons-outlined upload-icon"> file_upload </span>
+            <h3 className="dynamic-message"> Drag & drop any image here </h3>
+            {/* <label className="label"> or <span className="browse-files"> <input type="file" accept="image/*" className="default-file-input" multiple ref={fileInputRef} onChange={upLoadImage}/> <span className="browse-files-text">browse image</span> <span>from device</span> </span> </label> */}
+          </div>
+          <button type="button" className="search-button"> Search </button>
+        </div>
       </div>
-      <button type="">
-        Search
-      </button>
     </div>
+        {/* <span className="cannot-upload-message"> <span className="material-icons-outlined">error</span> Please select a file first <span className="material-icons-outlined cancel-alert-button">cancel</span> </span> */}
+        {/* <div className="file-block">
+          <div className="file-info"> <span className="material-icons-outlined file-icon">description</span> <span className="file-name"> </span> | <span className="file-size">  </span> </div>
+          <span className="material-icons remove-file-icon">delete</span>
+          <div className="progress-bar"> </div>
+        </div> */}
+        
+    
   </>)
 }
 

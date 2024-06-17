@@ -5,7 +5,9 @@ function App() {
   const [imgLink, setImgLink] = useState('');
   const [img, setImage] = useState('')
   const [displayImage, setDisplayImage] = useState('None');
-  const [data, setData] = useState('');
+  const [data, setData] = useState({"string0":'',
+                                    "string1":'',
+                                    "string2":''});
   const [displayResults, setDisplayResults] = useState('none');
   const fileInputRef = useRef(null);
 
@@ -57,8 +59,8 @@ function App() {
           })
         })
         .then(res => res.json())
-        .then(data => {
-          setData(data.string0);
+        .then(resData => {
+          setData(resData);
           setDisplayResults("Block");
         })
       }
@@ -83,7 +85,9 @@ function App() {
       </div>
     </div>
     <div style={{display: displayResults}}>
-      <img src={`data:image/jpeg;base64,${data}`} />
+      <img src={`data:image/jpeg;base64,${data.string0}`} />
+      <img src={`data:image/jpeg;base64,${data.string1}`} />
+      <img src={`data:image/jpeg;base64,${data.string2}`} />
     </div>
     
         {/* <span className="cannot-upload-message"> <span className="material-icons-outlined">error</span> Please select a file first <span className="material-icons-outlined cancel-alert-button">cancel</span> </span> */}

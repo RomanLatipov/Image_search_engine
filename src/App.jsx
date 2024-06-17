@@ -5,7 +5,8 @@ function App() {
   const [temp, setTemp] = useState('');
   // const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
-  const [display, setDisplay] = useState('None')
+  const [display, setDisplay] = useState('None');
+  const [data, setData] = useState('')
 
   function selectFiles() {
     fileInputRef.current.click();
@@ -32,6 +33,27 @@ function App() {
     console.log(imgLink)
     setTemp(imgLink)
     setDisplay("Block")
+
+    const reader = new FileReader()
+    let string64 = ""
+    reader.addEventListener("load", () => {
+      string64 = reader.result.replace("data:", "").replace(/^.+,/, "");
+      // console.log(test)
+      
+      fetch('http://localhost:5555/post_rqst', {
+        method:'POST',
+        headers:{
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          "string": string64
+        })
+      })
+      .then(res => res.json())
+      .then(data => setData(data.string0))
+    })
+    reader.readAsDataURL(files);
   }
   return (<>
   {/* enctype='multipart/form-data' */}
@@ -50,6 +72,7 @@ function App() {
         </div>
       </div>
     </div>
+    <img src={`data:image/jpeg;base64,${data}`} />
         {/* <span className="cannot-upload-message"> <span className="material-icons-outlined">error</span> Please select a file first <span className="material-icons-outlined cancel-alert-button">cancel</span> </span> */}
         {/* <div className="file-block">
           <div className="file-info"> <span className="material-icons-outlined file-icon">description</span> <span className="file-name"> </span> | <span className="file-size">  </span> </div>

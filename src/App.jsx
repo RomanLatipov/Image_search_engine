@@ -3,6 +3,7 @@ import {useState, useRef} from 'react';
 
 function App() {
   const [temp, setTemp] = useState('');
+  const [img, setImage] = useState('')
   // const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
   const [display, setDisplay] = useState('None');
@@ -28,17 +29,19 @@ function App() {
   function onDrop(event) {
     event.preventDefault();
     // setIsDragging(false);
-    const files = event.dataTransfer.files[0]
-    let imgLink = URL.createObjectURL(files); 
-    console.log(imgLink)
+    const imgFile = event.dataTransfer.files[0];
+    setImage(imgFile);
+    let imgLink = URL.createObjectURL(imgFile); 
+    // console.log(imgLink)
     setTemp(imgLink)
     setDisplay("Block")
-
+  }
+  function onSearch() {
     const reader = new FileReader()
-    let string64 = ""
-    reader.addEventListener("load", () => {
-      string64 = reader.result.replace("data:", "").replace(/^.+,/, "");
-      // console.log(test)
+    reader.readAsDataURL(img)
+    // let string64;
+    reader.onload = () => {
+      const string64 = reader.result.replace("data:", "").replace(/^.+,/, "");
       
       fetch('http://localhost:5555/post_rqst', {
         method:'POST',
@@ -52,8 +55,7 @@ function App() {
       })
       .then(res => res.json())
       .then(data => setData(data.string0))
-    })
-    reader.readAsDataURL(files);
+    }
   }
   return (<>
   {/* enctype='multipart/form-data' */}
@@ -68,7 +70,7 @@ function App() {
             <h3 className="dynamic-message"> Drag & drop any image here </h3>
             {/* <label className="label"> or <span className="browse-files"> <input type="file" accept="image/*" className="default-file-input" multiple ref={fileInputRef} onChange={upLoadImage}/> <span className="browse-files-text">browse image</span> <span>from device</span> </span> </label> */}
           </div>
-          <button type="button" className="search-button"> Search </button>
+          <button type="button" className="search-button" onClick={onSearch}> Search </button>
         </div>
       </div>
     </div>

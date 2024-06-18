@@ -1,4 +1,5 @@
 import './App.css';
+import Image from './Image';
 import {useState, useRef} from 'react';
 
 function App() {
@@ -31,11 +32,15 @@ function App() {
   function onDrop(event) {
     event.preventDefault();
     const imgFile = event.dataTransfer.files[0];
-    setImage(imgFile);
-    let imgLink = URL.createObjectURL(imgFile); 
-    // console.log(imgLink)
-    setImgLink(imgLink)
-    setDisplayImage("Block")
+    if (imgFile.type.includes("image")) {
+      setImage(imgFile);
+      let imgLink = URL.createObjectURL(imgFile); 
+      // console.log(imgLink)
+      setImgLink(imgLink)
+      setDisplayImage("Block")
+    }
+    else
+      alert("Must be an image!")
   }
 
   function onSearch() {
@@ -68,7 +73,6 @@ function App() {
   }
 
   return (<>
-  {/* enctype='multipart/form-data' */}
     <div className="upload-container" >
       <div className="display-container">
         <div className="image-container" style={{display: displayImage}}>
@@ -77,18 +81,21 @@ function App() {
         <div className="upload-files-container">
           <div className="drag-file-area" onDragOver={onDragOver} onDrop={onDrop}>
             <span className="material-icons-outlined upload-icon"> file_upload </span>
-            <h3 className="dynamic-message"> Drag & drop any image here </h3>
-            <label className="label"> or <span className="browse-files"> <input type="file" accept="image/*" className="default-file-input" multiple ref={fileInputRef} onChange={upLoadImage}/> <span className="browse-files-text">browse image</span> <span>from device</span> </span> </label>
+            <h2 className="dynamic-message"> Drag & drop any image here </h2>
+            <span className="">or <span className="browse-files"> <input type="file" className="default-file-input" multiple ref={fileInputRef} onChange={upLoadImage}/> <span className="browse-files-text">browse file</span> <span>from device</span> </span> </span>
           </div>
           <button type="button" className="search-button" onClick={onSearch}> Search </button>
         </div>
       </div>
     </div>
     <div style={{display: displayResults}}>
-      <img src={`data:image/jpeg;base64,${data.string0}`} />
-      <img src={`data:image/jpeg;base64,${data.string1}`} />
-      <img src={`data:image/jpeg;base64,${data.string2}`} />
+      <div style={{display: "flex", justifyContent: "space-evenly"}}>
+        <Image image={data.string0} />
+        <Image image={data.string1} />
+        <Image image={data.string2} />
+      </div>
     </div>
+    
     
         {/* <span className="cannot-upload-message"> <span className="material-icons-outlined">error</span> Please select a file first <span className="material-icons-outlined cancel-alert-button">cancel</span> </span> */}
         {/* <div className="file-block">

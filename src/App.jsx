@@ -20,8 +20,8 @@ function App() {
     setImage(event.target.files[0]);
     let imgLink = URL.createObjectURL(event.target.files[0]);
     setImgLink(imgLink);
-    setDisplayImage("Block")
-    console.log(imgLink)
+    setDisplayImage("Block");
+    console.log(imgLink);
   }
 
   function onDragOver(event){
@@ -36,8 +36,8 @@ function App() {
       setImage(imgFile);
       let imgLink = URL.createObjectURL(imgFile); 
       // console.log(imgLink)
-      setImgLink(imgLink)
-      setDisplayImage("Block")
+      setImgLink(imgLink);
+      setDisplayImage("Block");
     }
     else
       alert("Must be an image!")
@@ -82,7 +82,7 @@ function App() {
           <div className="drag-file-area" onDragOver={onDragOver} onDrop={onDrop}>
             <span className="material-icons-outlined upload-icon"> file_upload </span>
             <h2 className="dynamic-message"> Drag & drop any image here </h2>
-            <span className="">or <span className="browse-files"> <input type="file" className="default-file-input" multiple ref={fileInputRef} onChange={upLoadImage}/> <span className="browse-files-text">browse file</span> <span>from device</span> </span> </span>
+            <span>or <span className="browse-files"> <span className="browse-files-text">browse file</span> <span>from device</span> <input type="file" className="default-file-input" style={{cursor: "pointer"}} multiple ref={fileInputRef} onChange={upLoadImage}/></span> </span>
           </div>
           <button type="button" className="search-button" onClick={onSearch}> Search </button>
         </div>

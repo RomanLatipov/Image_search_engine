@@ -4,16 +4,6 @@ import fs from 'fs';
 
 const client = await weaviate.connectToLocal()
 
-// const schemaRes = await client.schema.getter().do();
-
-// const img = fs.readFileSync('images/morpheus.jpg');
-// const b64 = Buffer.from(img).toString('base64');
-// await client.data.creator().withClassName('Images').withProperties({
-//     image: b64,
-//     text: 'test'
-// }).do();
-// await client.data.creator().withClassName("Images").withProperties(dataObj).withId(uuid).do();
-
 const myCollection = client.collections.get('Images');
 const idArr = [];
 for await (let item of myCollection.iterator()) {

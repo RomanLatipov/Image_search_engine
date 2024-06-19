@@ -12,15 +12,11 @@ function App() {
   const [displayResults, setDisplayResults] = useState('none');
   const fileInputRef = useRef(null);
 
-  function selectFiles() {
-    fileInputRef.current.click();
-  }
-
   function upLoadImage(event) {
     setImage(event.target.files[0]);
     let imgLink = URL.createObjectURL(event.target.files[0]);
     setImgLink(imgLink);
-    setDisplayImage("Block");
+    setDisplayImage("block");
     console.log(imgLink);
   }
 
@@ -35,9 +31,8 @@ function App() {
     if (imgFile.type.includes("image")) {
       setImage(imgFile);
       let imgLink = URL.createObjectURL(imgFile); 
-      // console.log(imgLink)
       setImgLink(imgLink);
-      setDisplayImage("Block");
+      setDisplayImage("block");
     }
     else
       alert("Must be an image!")
@@ -66,7 +61,7 @@ function App() {
         .then(res => res.json())
         .then(resData => {
           setData(resData);
-          setDisplayResults("Block");
+          setDisplayResults("block");
         })
       }
     }
@@ -90,21 +85,11 @@ function App() {
     </div>
     <div style={{display: displayResults}}>
       <div style={{display: "flex", justifyContent: "space-evenly"}}>
-        <Image image={data.string0} />
-        <Image image={data.string1} />
-        <Image image={data.string2} />
+        <Image img64={data.string0} />
+        <Image img64={data.string1} />
+        <Image img64={data.string2} />
       </div>
     </div>
-    
-    
-        {/* <span className="cannot-upload-message"> <span className="material-icons-outlined">error</span> Please select a file first <span className="material-icons-outlined cancel-alert-button">cancel</span> </span> */}
-        {/* <div className="file-block">
-          <div className="file-info"> <span className="material-icons-outlined file-icon">description</span> <span className="file-name"> </span> | <span className="file-size">  </span> </div>
-          <span className="material-icons remove-file-icon">delete</span>
-          <div className="progress-bar"> </div>
-        </div> */}
-        
-    
   </>)
 }
 

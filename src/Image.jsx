@@ -1,19 +1,33 @@
 import { useState } from "react";
-import { useDetectClickOutside } from "react-detect-click-outside";
 
-export default function Image({image}) {
-    const [test, settest] = useState({});
-    function handleClick(event) {
-        settest({transform: "scale(2.5)"})
+export default function Image({img64}) {
+    const [display, setDisplay] = useState('hidden');
+
+    function handleClick() {
+        setDisplay("visible");
     }
-    const closeDropdown = () => {
-        settest({})
+    function off() {
+        setDisplay("hidden");
     }
-    const ref = useDetectClickOutside({ onTriggered: closeDropdown });
+
+    async function download(image) {
+        const base64Response = await fetch(`data:image/jpeg;base64,${image}`);
+        const blob = await base64Response.blob();
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "image.jpg";
+        link.click();
+    }
 
     return (<>
         <div className="image-result-container">
-            <img src={`data:image/jpeg;base64,${image}`} style={test} onClick={handleClick} ref={ref}/>
+            <img src={`data:image/jpeg;base64,${img64}`} onClick={handleClick}/>
+        </div>
+        <div className="overlay" onClick={off} style={{visibility: display}}>
+            <div className="overlay-image-container">
+                <img src={`data:image/jpeg;base64,${img64}`} />
+            </div>
+            <button className={"search-button"} onClick={() => download(img64)}>Download</button>
         </div>
     </>)
 }
